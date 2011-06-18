@@ -89,7 +89,10 @@ h1, #text div {
   z-index: 1;
 }
 .powered {
-font-size: 50%;
+  font-size: 50%;
+}
+.powered a, .powered a:visited {
+  color: #333;
 }
   </style>
   <script type="text/javascript">
