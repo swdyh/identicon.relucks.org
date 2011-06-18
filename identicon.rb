@@ -88,6 +88,9 @@ h1, #text div {
   left: 0;
   z-index: 1;
 }
+.powered {
+font-size: 50%;
+}
   </style>
   <script type="text/javascript">
 function setIcon(path) {
@@ -118,6 +121,9 @@ window.addEventListener('load', function() {
     <h1>Identicon</h1>
     <div><%=h base_url %>{string}</span></div>
     <div><%=h base_url %>{string}?size=100 (size &lt;= <%=h MAX_SIZE %>)</div>
+    <div class="powered">
+      powered by <a href="http://www.dotcloud.com">www.dotcloud.com</a>
+    </div>
   </div>
   <div><img src="<%=h s %>" width="100%" height="100%" /></div>
 </body>
