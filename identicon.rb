@@ -106,6 +106,7 @@ function setIcon(path) {
    newlink.href = path
    document.getElementsByTagName('head')[0].appendChild(newlink)
 }
+/*
 window.addEventListener('load', function() {
   var img = document.images[0]
   window.setInterval(function() {
@@ -114,6 +115,7 @@ window.addEventListener('load', function() {
     img.src = s
   }, 15000)
 }, false)
+*/
   </script>
 </head>
 <body>
