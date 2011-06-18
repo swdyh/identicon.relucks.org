@@ -1,20 +1,26 @@
 #!/usr/bin/ruby
 
+require 'fileutils'
 require 'digest/md5'
 require 'erb'
 require 'rubygems'
+require 'sinatra'
 require 'quilt'
 
 include ERB::Util
 
-ICON_DIR = 'tmp'
-URL_PATH = 'http://identicon.relucks.org/'
+TITLE    = 'Identicon'
+ICON_DIR = 'tmp/icons'
 MAX_SIZE = 500
-TITLE    = 'identicon.relucks.org'
+
+unless File.exists?(ICON_DIR)
+  FileUtils.mkdir_p ICON_DIR
+end
 
 get '/' do
-  s = URL_PATH + Digest::MD5.hexdigest(rand().to_s)
-  erb :index, :locals => { :s => s }
+  base_url = [request.scheme,  '://', request.host, request.port == 80 ? '' : ':' + request.port.to_s, '/'].join('')
+  s = base_url + Digest::MD5.hexdigest(rand().to_s)
+  erb :index, :locals => { :s => s, :base_url => base_url }
 end
 
 get '/*' do
@@ -41,8 +47,6 @@ get '/*' do
   end
   send_file path, :type => 'image/png', :disposition => 'inline'
 end
-
-use_in_file_templates!
 
 __END__
 
@@ -112,8 +116,8 @@ window.addEventListener('load', function() {
 <body>
   <div id="text">
     <h1>Identicon</h1>
-    <div><%=h URL_PATH %>{string}</span></div>
-    <div><%=h URL_PATH %>{string}?size=100 (size &lt;= <%=h MAX_SIZE %>)</div>
+    <div><%=h base_url %>{string}</span></div>
+    <div><%=h base_url %>{string}?size=100 (size &lt;= <%=h MAX_SIZE %>)</div>
   </div>
   <div><img src="<%=h s %>" width="100%" height="100%" /></div>
 </body>
