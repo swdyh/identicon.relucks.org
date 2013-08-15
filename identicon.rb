@@ -127,7 +127,7 @@ window.addEventListener('load', function() {
     <div><%=h base_url %>{string}</span></div>
     <div><%=h base_url %>{string}?size=100 (size &lt;= <%=h MAX_SIZE %>)</div>
     <div class="powered">
-      powered by <a href="http://www.dotcloud.com">www.dotcloud.com</a>
+      powered by <a href="https://www.heroku.com/">www.heroku.com</a>
     </div>
   </div>
   <div><img src="<%=h s %>" width="100%" height="100%" /></div>
