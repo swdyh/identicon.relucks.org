@@ -45,6 +45,8 @@ get '/' do
   elsif params.key? 'cache_del_all'
     cache_del_all
     info = cache_info
+  else
+    cache_del if rand(100) == 0
   end
   erb :index, :locals => { :s => s, :base_url => base_url, :info => info }
 end
