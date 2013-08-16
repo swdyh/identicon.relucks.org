@@ -13,6 +13,22 @@ TITLE    = 'Identicon'
 ICON_DIR = 'tmp/icons'
 MAX_SIZE = 500
 
+def cache_info
+  {
+    cache_dir: ICON_DIR,
+    cache_size: `du -sh '#{ICON_DIR}'`.strip,
+    cache_num: `find '#{ICON_DIR}' -type f|wc -l`.strip
+  }
+end
+
+def cache_del
+  `find '#{ICON_DIR}' -type f -amin +100 2> /dev/null | xargs rm -f`
+end
+
+def cache_del_all
+  `find '#{ICON_DIR}' -type f 2> /dev/null | xargs rm -f`
+end
+
 unless File.exists?(ICON_DIR)
   FileUtils.mkdir_p ICON_DIR
 end
@@ -20,7 +36,17 @@ end
 get '/' do
   base_url = [request.scheme,  '://', request.host, request.port == 80 ? '' : ':' + request.port.to_s, '/'].join('')
   s = base_url + Digest::MD5.hexdigest(rand().to_s)
-  erb :index, :locals => { :s => s, :base_url => base_url }
+  info = {}
+  if params.key? 'info'
+    info = cache_info
+  elsif params.key? 'cache_del'
+    cache_del
+    info = cache_info
+  elsif params.key? 'cache_del_all'
+    cache_del_all
+    info = cache_info
+  end
+  erb :index, :locals => { :s => s, :base_url => base_url, :info => info }
 end
 
 get '/*' do
@@ -126,6 +152,9 @@ window.addEventListener('load', function() {
     <h1>Identicon</h1>
     <div><%=h base_url %>{string}</span></div>
     <div><%=h base_url %>{string}?size=100 (size &lt;= <%=h MAX_SIZE %>)</div>
+    <% if info %>
+      <div><% info.each do |k, v| %><%= k %>: <%=h v %><br /><% end %></div>
+    <% end %>
     <div class="powered">
       powered by <a href="https://www.heroku.com/">www.heroku.com</a>
     </div>
